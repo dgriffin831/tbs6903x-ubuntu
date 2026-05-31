@@ -1,0 +1,41 @@
+diff --git a/src/neumo-frontend.h b/src/neumo-frontend.h
+index 954a9a5..7dffd2a 100644
+--- a/src/neumo-frontend.h
++++ b/src/neumo-frontend.h
+@@ -1328,12 +1328,12 @@ struct dvb_select_api {
+ #define DVB_API_FE_SET_PROPERTY		   _IOW('o', 82, struct dvb_api_dtv_properties)
+ #define DVB_API_FE_GET_PROPERTY		   _IOR('o', 83, struct dvb_api_dtv_properties)
+ 
+-#define FE_SET_PROPERTY		   _IOW('o', 182, struct dtv_properties)
+-#define FE_GET_PROPERTY		   _IOR('o', 183, struct dtv_properties)
+-#define FE_ALGO_CTRL		       _IOW('o', 184, struct dtv_algo_ctrl)
+-#define FE_SET_RF_INPUT		   _IOW('o', 185, struct fe_rf_input_control)
+-#define FE_GET_EXTENDED_INFO	 _IOR('o', 186, struct dvb_frontend_extended_info)
+-#define FE_DISEQC_SEND_LONG_MASTER_CMD  _IOW('o', 187, struct dvb_diseqc_long_master_cmd)
++#define FE_SET_PROPERTY		   _IOW('o', 82, struct dtv_properties)
++#define FE_GET_PROPERTY		   _IOR('o', 83, struct dtv_properties)
++#define FE_ALGO_CTRL		       _IOW('o', 84, struct dtv_algo_ctrl)
++#define FE_SET_RF_INPUT		   _IOW('o', 85, struct fe_rf_input_control)
++#define FE_GET_EXTENDED_INFO	 _IOR('o', 86, struct dvb_frontend_extended_info)
++#define FE_DISEQC_SEND_LONG_MASTER_CMD  _IOW('o', 87, struct dvb_diseqc_long_master_cmd)
+ 
+ #if defined(__DVB_CORE__) || !defined(__KERNEL__)
+ 
+diff --git a/src/stid135-blindscan.cc b/src/stid135-blindscan.cc
+index 31f9dab..bbc4e46 100644
+--- a/src/stid135-blindscan.cc
++++ b/src/stid135-blindscan.cc
+@@ -1163,10 +1163,8 @@ int frontend_t::get_extended_frontend_info() {
+ 	};
+ 
+ 	if ((ioctl(fefd, FE_GET_PROPERTY, &props)) == -1) {
+-		scanner.xprintf("FE_GET_PROPERTY failed: %s", strerror(errno));
+-		//set_interrupted(ERROR_TUNE<<8);
+-		close_frontend(fefd);
+-		return -1;
++		scanner.xprintf("FE_GET_PROPERTY capability query failed: %s; continuing with extended frontend info\n",
++				strerror(errno));
+ 	}
+ 
+ 	adapter_name = fe_info.adapter_name;
+

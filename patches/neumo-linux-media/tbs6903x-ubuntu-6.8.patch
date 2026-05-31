@@ -1,0 +1,58 @@
+diff --git a/drivers/media/pci/tbsecp3/tbsecp3-core.c b/drivers/media/pci/tbsecp3/tbsecp3-core.c
+index dec8ff4a4..deba9db99 100644
+--- a/drivers/media/pci/tbsecp3/tbsecp3-core.c
++++ b/drivers/media/pci/tbsecp3/tbsecp3-core.c
+@@ -211,8 +211,8 @@ static int tbsecp3_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	if (pci_enable_device(pdev) < 0)
+ 		return -ENODEV;
+ 
+-	if(dma_set_mask(&pdev->dev, DMA_BIT_MASK(64)))
+-		if(dma_set_mask(&pdev->dev, DMA_BIT_MASK(32)))
++	if(dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64)))
++		if(dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32)))
+ 		{
+ 			dev_err(&pdev->dev, "64/32-bit PCI DMA not supported\n");
+ 			goto err0;
+diff --git a/drivers/media/pci/tbsecp3/tbsecp3-dma.c b/drivers/media/pci/tbsecp3/tbsecp3-dma.c
+index def5d31f0..dfbcc6034 100644
+--- a/drivers/media/pci/tbsecp3/tbsecp3-dma.c
++++ b/drivers/media/pci/tbsecp3/tbsecp3-dma.c
+@@ -129,7 +129,7 @@ void tbsecp3_dma_reg_init(struct tbsecp3_dev *dev)
+ 
+ 	for (i = 0; i < dev->info->adapters; i++) {
+ 		tbs_write(adapter->dma.base, TBSECP3_DMA_EN, 0);
+-		tbs_write(adapter->dma.base, TBSECP3_DMA_ADDRH, 0);
++		tbs_write(adapter->dma.base, TBSECP3_DMA_ADDRH, upper_32_bits(adapter->dma.dma_addr));
+ 		tbs_write(adapter->dma.base, TBSECP3_DMA_ADDRL, (u32) adapter->dma.dma_addr);
+ 		tbs_write(adapter->dma.base, TBSECP3_DMA_TSIZE, adapter->dma.page_size);
+ 		tbs_write(adapter->dma.base, TBSECP3_DMA_BSIZE, adapter->dma.buffer_size);
+diff --git a/drivers/media/rc/rc-main.c b/drivers/media/rc/rc-main.c
+index d99f8e6a6..c760406b3 100644
+--- a/drivers/media/rc/rc-main.c
++++ b/drivers/media/rc/rc-main.c
+@@ -2055,14 +2055,14 @@ void dvb_git_versions(const char ** neumo, const char ** rev, const char ** tag,
+ 	*neumo  = "\"neumo\";\nversion = \"1.7\";";
+ }
+ 
+-static void version_log()
++static void version_log(void)
+ {
+ 	char const* neumo;
+ 	char const* rev;
+ 	char const* tag;
+ 	char const * branch;
+ 	dvb_git_versions(&neumo, &rev, &tag, &branch);
+-	printk(KERN_ERR "neumodvb blindscan drivers %s; %s;%s;\n", ref, tag, branch);
++	printk(KERN_ERR "neumodvb blindscan drivers %s; %s;%s;\n", rev, tag, branch);
+ }
+ 
+ /*
+@@ -2075,6 +2075,7 @@ static int __init rc_core_init(void)
+ 		pr_err("rc_core: unable to register rc class\n");
+ 		return rc;
+ 	}
++	version_log();
+ 
+ 	rc = lirc_dev_init();
+ 	if (rc) {
+

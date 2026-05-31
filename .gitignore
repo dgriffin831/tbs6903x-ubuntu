@@ -1,0 +1,18 @@
+# Local upstream checkouts and build trees. The installer recreates these.
+/src/
+/work/
+
+# Common kernel/media build outputs if sources are temporarily copied in.
+*.o
+*.ko
+*.mod
+*.mod.c
+*.cmd
+Module.symvers
+modules.order
+.tmp_versions/
+
+# Local editor and OS noise.
+*~
+*.swp
+.DS_Store
