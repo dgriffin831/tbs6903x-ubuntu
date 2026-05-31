@@ -32,7 +32,6 @@ Neumo Drivers: api_version=1700
 - `scripts/verify.sh` - quick post-install checks.
 - `patches/` - local compatibility patches applied by the installer.
 - `docs/` - notes documenting the exact setup and fixes applied.
-- `captures/` - successful no-dish LNB spectrum test output.
 
 The installer creates upstream source checkouts under `work/` by default. Override this with:
 

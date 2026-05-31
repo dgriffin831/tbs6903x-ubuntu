@@ -58,12 +58,6 @@ Generated files:
 /tmp/blindscan_rf0.dat
 ```
 
-Copies from the first successful no-dish test are stored in:
-
-```text
-/home/ubuntu/tbs6903x/captures
-```
-
 ## Once A Dish Is Available
 
 Run a wider spectrum scan against the known satellite position:
@@ -96,4 +90,3 @@ sudo neumo-tune \
 ```
 
 The TBS6903x/STiD135 path supports constellation/IQ sample capture through the neumo API. It is not a general wideband SDR raw RF IQ capture device.
-
