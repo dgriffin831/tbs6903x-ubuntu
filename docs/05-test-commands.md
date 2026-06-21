@@ -75,6 +75,32 @@ sudo timeout 120s stid135-blindscan \
 
 If the dish is aligned, `/tmp/peaks_rf0_*.dat` should contain candidate peaks and `/tmp/blindscan_rf0.dat` should contain locked transponders.
 
+## Live Dish-Aiming Waterfall
+
+For a live terminal waterfall while moving the dish, use:
+
+```bash
+./scripts/live-waterfall.py -a 1 --rf-in 3 -p H \
+  -s 11820000 -e 11870000 \
+  --target-freq 11842000 \
+  --lnb universal
+```
+
+For the other polarity:
+
+```bash
+./scripts/live-waterfall.py -a 1 --rf-in 3 -p V \
+  -s 11820000 -e 11870000 \
+  --target-freq 11842000 \
+  --lnb universal
+```
+
+The display scrolls one row per spectrum scan. Colored blocks indicate stronger
+bins, and the vertical marker shows the target frequency. During aiming,
+maximize `peak` and `contrast`, and look for a stable bright feature near the
+known transponder frequency before rerunning a full blindscan. Use `--no-color`
+if the terminal does not render ANSI colors cleanly.
+
 ## IQ / Constellation Sample Path
 
 This requires a real carrier to be useful:

@@ -16,3 +16,7 @@ modules.order
 *~
 *.swp
 .DS_Store
+
+# Python helper validation artifacts.
+__pycache__/
+*.pyc

@@ -105,6 +105,7 @@ build_neumo_driver() {
 
   log "Configuring neumo media build"
   run_as_user make -C "$media_build" dir DIR=../media
+  run_as_user make -C "$media_build" release VER="$(uname -r)"
   run_as_user make -C "$media_build" allyesconfig
   disable_ccs_modules "$media_build"
 
@@ -141,6 +142,8 @@ build_blindscan_tools() {
   $SUDO install -m 0755 "$blindscan/build/src/neumo-tune" /usr/local/bin/neumo-tune
   $SUDO install -m 0755 "$blindscan/build/src/neumo-dmx" /usr/local/bin/neumo-dmx
   $SUDO install -m 0755 "$blindscan/build/src/stid135-blindscan" /usr/local/bin/stid135-blindscan
+  $SUDO install -m 0755 "$blindscan/build/src/libneumoutil.so" /usr/local/lib/libneumoutil.so
+  $SUDO ldconfig
 
   $SUDO install -d -m 0755 /usr/config
   $SUDO install -m 0644 "$blindscan/config/neumo-blindscan.xml" /usr/config/neumo-blindscan.xml
@@ -168,4 +171,3 @@ main() {
 }
 
 main "$@"
-

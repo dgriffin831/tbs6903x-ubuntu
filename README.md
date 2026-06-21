@@ -1,6 +1,6 @@
 # TBS6903x Ubuntu Setup
 
-Repeatable Ubuntu setup for the TBS6903x / TBS6093-X dual DVB-S/S2/S2X PCIe card.
+Repeatable Ubuntu setup for the TBS6903x / TBS6903-X dual DVB-S/S2/S2X PCIe card.
 
 This repo documents the working setup and includes the patches and installer used to bring the card up on Ubuntu 24.04 with kernel `6.8.0-110-generic`.
 
@@ -30,6 +30,9 @@ Neumo Drivers: api_version=1700
 
 - `scripts/install.sh` - one-shot installer for dependencies, source clones, patches, build, install, and verification.
 - `scripts/verify.sh` - quick post-install checks.
+- `scripts/live-waterfall.py` - live terminal waterfall for dish aiming with STiD135 spectrum scans.
+- `scripts/spectrum-analyzer.py` - compact terminal plotter for generated spectrum `.dat` files.
+- `scripts/run-neumodvb.sh` - guarded launcher for a locally built neumoDVB GUI tree.
 - `patches/` - local compatibility patches applied by the installer.
 - `docs/` - notes documenting the exact setup and fixes applied.
 
@@ -60,6 +63,23 @@ stid135-blindscan
 tune-s2
 szap-s2
 femon-s2
+```
+
+## Local Helpers
+
+For a live terminal waterfall while aiming the dish:
+
+```bash
+./scripts/live-waterfall.py -a 1 --rf-in 3 -p H \
+  -s 11820000 -e 11870000 \
+  --target-freq 11842000 \
+  --lnb universal
+```
+
+For a static terminal plot of spectrum files generated under `/tmp`:
+
+```bash
+./scripts/spectrum-analyzer.py /tmp/spectrum_rf3_H.dat
 ```
 
 ## One-Shot AI Prompt
